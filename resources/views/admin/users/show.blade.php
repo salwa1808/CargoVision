@@ -93,10 +93,6 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="detail-label">Articles Published</div>
-                        <div class="detail-value">{{ $articleCount }} Articles</div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="detail-label">Joined Date</div>
                         <div class="detail-value">{{ $user->created_at->format('d M Y, H:i') }}</div>
                     </div>
@@ -112,11 +108,7 @@
                     <h5 class="text-white fw-bold mb-3">⏱ Recent Activity Summary</h5>
                     <ul class="list-unstyled text-muted small" style="line-height: 2;">
                         <li>🟢 User logged in on browser from Client IP (Success)</li>
-                        @if($articleCount > 0)
-                            <li>📰 Published risk intelligence content & related supply chain reports</li>
-                        @else
-                            <li>👤 Account initialized and role verified successfully</li>
-                        @endif
+                        <li>👤 Account initialized and role verified successfully</li>
                     </ul>
                 </div>
             </div>

@@ -49,4 +49,14 @@ class Country extends Model
     {
         return $this->hasMany(Port::class);
     }
+
+    public function originatingShipments()
+    {
+        return $this->hasMany(Shipment::class, 'origin_country_id');
+    }
+
+    public function destinationShipments()
+    {
+        return $this->hasMany(Shipment::class, 'destination_country_id');
+    }
 }

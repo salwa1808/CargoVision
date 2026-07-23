@@ -32,5 +32,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(VesselSeeder::class);
+        $this->call(ShipmentSeeder::class);
     }
 }

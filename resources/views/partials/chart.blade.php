@@ -178,7 +178,7 @@ function loadChart() {
     chart = new Chart(ctx, config);
 
     // Theme Switch listener
-    document.getElementById('darkModeBtn').addEventListener('click', () => {
+    document.getElementById('darkModeBtn')?.addEventListener('click', () => {
         setTimeout(() => {
             const isDarkNow = document.body.classList.contains('bg-dark');
             const newTextColor = isDarkNow ? '#94a3b8' : '#64748b';

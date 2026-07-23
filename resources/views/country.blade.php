@@ -232,11 +232,11 @@
                         <small class="text-muted fw-semibold" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">
                             Last Sync: <span id="weatherSyncTime" class="text-main fw-normal" style="font-size: 12px; margin-left: 4px;">{{ $latestWeather ? $latestWeather->updated_at->toIso8601String() : '-' }}</span>
                         </small>
-                        <button id="updateWeatherBtn" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-2 fw-semibold" style="border-radius: 10px; padding: 8px 14px;">
+                        @if(auth()->user()->role === 'admin')<button id="updateWeatherBtn" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-2 fw-semibold" style="border-radius: 10px; padding: 8px 14px;">
                             <span id="weatherBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             <span id="weatherBtnIcon">🔄</span>
-                            Update Live Data
-                        </button>
+                            Perbarui dari Open-Meteo
+                        </button>@endif
                     </div>
                 </div>
             </div>
@@ -438,7 +438,7 @@ loadTrend();
 setInterval(loadTrend,30000);
 
 // Watch for theme toggles to update chart configurations
-document.getElementById('darkModeBtn').addEventListener('click', () => {
+document.getElementById('darkModeBtn')?.addEventListener('click', () => {
     setTimeout(() => {
         const isDarkNow = document.body.classList.contains('bg-dark');
         const newTextColor = isDarkNow ? '#94a3b8' : '#64748b';
@@ -468,7 +468,7 @@ document.getElementById('updateWeatherBtn')?.addEventListener('click', () => {
     // Get CSRF Token
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
-    fetch(`/api/weather/refresh/${countryId}`, {
+    fetch(`/admin/weather/refresh/${countryId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

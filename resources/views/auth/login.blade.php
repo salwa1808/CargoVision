@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Global Supply Chain Risk Platform</title>
+    <title>Login — CargoVision</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,11 +11,11 @@
 
     <style>
         :root {
-            --bg-body: radial-gradient(circle at 10% 20%, #1c0f38 0%, #0d061c 50%, #05020c 100%);
+            --bg-body: radial-gradient(circle at 15% 15%, #0b3550 0%, #071a2b 45%, #030b16 100%);
             --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-primary: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            --accent-primary: linear-gradient(135deg, #06b6d4, #2563eb);
         }
 
         body {
@@ -28,6 +28,7 @@
             justify-content: center;
             overflow-x: hidden;
         }
+        body::before{content:'';position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(103,232,249,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(103,232,249,.025) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,black,transparent 75%)}
 
         .login-container {
             width: 100%;
@@ -36,12 +37,12 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.02);
+            background: linear-gradient(145deg, rgba(15,35,53,.88), rgba(4,18,32,.82));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            box-shadow: 0 28px 80px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.05);
             padding: 40px;
         }
 
@@ -63,7 +64,7 @@
         .brand-subtitle {
             font-size: 10px;
             font-weight: 800;
-            color: #a78bfa;
+            color: #67e8f9;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
@@ -77,12 +78,12 @@
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
-            border-color: rgba(139, 92, 246, 0.4) !important;
+            box-shadow: 0 0 0 3px rgba(6,182,212,.16) !important;
+            border-color: rgba(34,211,238,.45) !important;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+            background: linear-gradient(135deg, #06b6d4, #2563eb) !important;
             border: none !important;
             border-radius: 12px !important;
             padding: 12px !important;
@@ -92,7 +93,7 @@
         }
 
         .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5) !important;
+            box-shadow: 0 10px 28px rgba(6,182,212,.32) !important;
             transform: translateY(-1px) !important;
         }
 
@@ -153,12 +154,9 @@
 <div class="login-container">
     <div class="glass-card">
         <div class="brand-logo-wrapper">
-            <svg width="40" height="46" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 0L2 4V13C2 19.3 6.3 25.1 12 28C17.7 25.1 22 19.3 22 13V4L12 0Z" fill="#ff7a00"/>
-                <path d="M12 2.5L3.8 5.8V13.2C3.8 18.5 7.4 23.3 12 25.8V2.5Z" fill="#ff9900"/>
-            </svg>
-            <span class="brand-title">SupplyGuard Risk</span>
-            <span class="brand-subtitle">Authentication Portal</span>
+            <svg width="54" height="54" viewBox="0 0 32 32" fill="none" style="color:#67e8f9;filter:drop-shadow(0 8px 18px rgba(6,182,212,.3))"><path d="M5 18h22l-3.2 6.2A5 5 0 0 1 19.4 27h-7.8a5 5 0 0 1-4.4-2.8L5 18Z" fill="currentColor"/><path d="M9 10h14v8H9zM13 6h6v4h-6zM3 14h26M3 29c3-2 5-2 8 0s5 2 8 0 5-2 10 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span class="brand-title">CargoVision</span>
+            <span class="brand-subtitle">Maritime Intelligence Portal</span>
         </div>
 
         @if($errors->any())
@@ -201,7 +199,7 @@
 
         <div class="text-center mt-4">
             <span class="text-muted small">New user? </span>
-            <a href="{{ url('/register') }}" class="text-decoration-none small" style="color: #c084fc; font-weight: 600;">Create account</a>
+            <a href="{{ url('/register') }}" class="text-decoration-none small" style="color: #67e8f9; font-weight: 600;">Create account</a>
         </div>
     </div>
 </div>

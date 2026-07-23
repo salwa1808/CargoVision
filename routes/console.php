@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('fetch:all')
     ->everyFiveMinutes();
+
+Schedule::command('shipments:update-progress')->everyFiveMinutes()->withoutOverlapping();

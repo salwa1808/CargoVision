@@ -418,7 +418,7 @@
                                 </tr>
                                 <tr>
                                     <td class="about-label">Developer</td>
-                                    <td class="text-end about-value">SupplyGuard Dev Team</td>
+                                    <td class="text-end about-value">CargoVision Team</td>
                                 </tr>
                                 <tr>
                                     <td class="about-label">Laravel Version</td>
@@ -472,7 +472,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadSavedSettings() {
         // Section 1
         document.getElementById('themeSelect').value = localStorage.getItem('theme') || 'dark';
-        document.getElementById('accentSelect').value = localStorage.getItem('accent_color') || 'purple';
+        document.getElementById('accentSelect').value = localStorage.getItem('accent_color') || 'blue';
         document.getElementById('sidebarSwitch').checked = localStorage.getItem('sidebar_state') === 'collapsed';
         document.getElementById('animationSwitch').checked = localStorage.getItem('enable_animations') !== 'off';
 

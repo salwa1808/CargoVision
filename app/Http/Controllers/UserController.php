@@ -94,10 +94,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // Simple statistics
-        $articleCount = $user->articles()->count();
-        
-        return view('admin.users.show', compact('user', 'articleCount'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**

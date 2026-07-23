@@ -1,384 +1,106 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container py-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-5 mt-2">
-
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
-            <h1 class="h3 fw-bold mb-1" style="letter-spacing: -0.02em;">
-                📊 Supply Chain Analytics
-            </h1>
-            <p class="text-muted fw-medium mb-0">
-                Detailed threat analysis & geographical distributions
-            </p>
+            <h1 class="h3 fw-bold mb-1">📊 Supply Chain Risk Analytics</h1>
+            <p class="text-muted mb-0">Tren ekonomi, mata uang, dan faktor pembentuk risiko global.</p>
         </div>
+        @if(auth()->user()?->role === 'admin')
+            <div class="d-flex gap-2">
+                <form method="POST" action="{{ route('admin.risk.recalculate') }}">@csrf
+                    <button class="btn btn-primary">🧮 Hitung Ulang Risiko</button>
+                </form>
+                <form method="POST" action="{{ route('admin.data.sync') }}">@csrf
+                    <button class="btn btn-outline-primary">🔄 Sinkronkan Semua Data</button>
+                </form>
+            </div>
+        @endif
+    </div>
 
-        <a href="/" class="btn btn-outline-light d-inline-flex align-items-center gap-2 fw-semibold" style="border-radius: 12px; padding: 10px 20px; border-color: var(--border-color);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="12" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            Back to Dashboard
-        </a>
+    @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
 
+    <div class="card card-body shadow-sm mb-4">
+        <div class="row align-items-end g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Negara untuk grafik tren</label>
+                <select id="analyticsCountry" class="form-select"><option value="">Memuat negara...</option></select>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <small id="dataScope" class="text-muted">Data tersimpan pada database CargoVision.</small>
+            </div>
+        </div>
     </div>
 
     <div class="row g-4 mb-4">
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">Risk Level Distribution</div><div class="card-body"><div style="height:300px"><canvas id="riskPie"></canvas></div></div></div></div>
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">Average Risk Factor Breakdown</div><div class="card-body"><div style="height:300px"><canvas id="factorChart"></canvas></div></div></div></div>
+    </div>
 
-        <div class="col-lg-6">
-
-            <div class="card shadow-sm h-100">
-
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Risk Level Distribution</span>
-                    <span class="text-muted fw-normal" style="font-size: 13px;">Proportion of risk categories</span>
-                </div>
-
-                <div class="card-body d-flex align-items-center justify-content-center" style="min-height: 340px;">
-
-                    <div style="position: relative; height: 280px; width: 100%;">
-                        <canvas id="riskPie"></canvas>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-6">
-
-            <div class="card shadow-sm h-100">
-
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Countries by Region</span>
-                    <span class="text-muted fw-normal" style="font-size: 13px;">Regional coverage frequency</span>
-                </div>
-
-                <div class="card-body" style="min-height: 340px;">
-
-                    <div style="position: relative; height: 280px; width: 100%;">
-                        <canvas id="regionChart"></canvas>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">GDP Trend</div><div class="card-body"><div style="height:280px"><canvas id="gdpChart"></canvas></div></div></div></div>
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">Inflation Trend</div><div class="card-body"><div style="height:280px"><canvas id="inflationChart"></canvas></div></div></div></div>
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">Currency Trend</div><div class="card-body"><div style="height:280px"><canvas id="currencyChart"></canvas></div></div></div></div>
+        <div class="col-lg-6"><div class="card h-100 shadow-sm"><div class="card-header">Risk Trend</div><div class="card-body"><div style="height:280px"><canvas id="riskTrendChart"></canvas></div></div></div></div>
     </div>
 
     <div class="row g-4">
-
-        <div class="col-md-6">
-
-            <div class="card shadow-sm">
-
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span class="text-danger">🔴 Top 5 Highest Risk</span>
-                    <span class="badge bg-danger" style="font-size: 11px !important;">Critical Area</span>
-                </div>
-
-                <div class="card-body p-0">
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead>
-
-                        <tr style="border-bottom: 2px solid var(--border-color);">
-
-                            <th style="padding-left: 24px;">Country</th>
-
-                            <th width="120">Score</th>
-
-                        </tr>
-
-                        </thead>
-
-                        <tbody id="highestTable">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card shadow-sm">
-
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span class="text-success">🟢 Top 5 Lowest Risk</span>
-                    <span class="badge bg-success" style="font-size: 11px !important;">Stable Area</span>
-                </div>
-
-                <div class="card-body p-0">
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead>
-
-                        <tr style="border-bottom: 2px solid var(--border-color);">
-
-                            <th style="padding-left: 24px;">Country</th>
-
-                            <th width="120">Score</th>
-
-                        </tr>
-
-                        </thead>
-
-                        <tbody id="lowestTable">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
+        <div class="col-md-6"><div class="card shadow-sm"><div class="card-header text-danger">🔴 Highest-Risk Countries</div><div class="table-responsive"><table class="table mb-0"><tbody id="highestTable"></tbody></table></div></div></div>
+        <div class="col-md-6"><div class="card shadow-sm"><div class="card-header text-success">🟢 Lowest-Risk Countries</div><div class="table-responsive"><table class="table mb-0"><tbody id="lowestTable"></tbody></table></div></div></div>
     </div>
-
 </div>
 
 <script>
+const charts = {};
+const colors = { text:'#94a3b8', grid:'rgba(148,163,184,.12)' };
 
-let pieChart;
-let regionChart;
-
-function loadAnalytics(){
-
-Promise.all([
-
-fetch('/api/dashboard').then(r=>r.json()),
-
-fetch('/api/analytics').then(r=>r.json())
-
-])
-
-.then(([dashboard,analytics])=>{
-
-    const isDark = document.body.classList.contains('bg-dark');
-    const textColor = isDark ? '#94a3b8' : '#64748b';
-    const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
-
-    // PIE
-
-    if(pieChart){
-
-        pieChart.destroy();
-
-    }
-
-    pieChart=new Chart(
-
-        document.getElementById('riskPie'),
-
-        {
-
-            type:'pie',
-
-            data:{
-
-                labels:[
-
-                    'High',
-
-                    'Medium',
-
-                    'Low'
-
-                ],
-
-                datasets:[{
-
-                    data:[
-
-                        dashboard.high_risk,
-
-                        dashboard.medium_risk,
-
-                        dashboard.low_risk
-
-                    ],
-                    backgroundColor: [
-                        'rgba(239, 68, 68, 0.85)',
-                        'rgba(245, 158, 11, 0.85)',
-                        'rgba(16, 185, 129, 0.85)'
-                    ],
-                    borderColor: isDark ? '#111625' : '#ffffff',
-                    borderWidth: 2
-
-                }]
-
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            color: textColor,
-                            font: {
-                                family: 'Plus Jakarta Sans',
-                                weight: '500'
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-
-    );
-
-    // REGION
-
-    if(regionChart){
-
-        regionChart.destroy();
-
-    }
-
-    regionChart=new Chart(
-
-        document.getElementById('regionChart'),
-
-        {
-
-            type:'bar',
-
-            data:{
-
-                labels:analytics.region.map(x=>x.region),
-
-                datasets:[{
-
-                    label:'Countries',
-
-                    data:analytics.region.map(x=>x.total),
-                    backgroundColor: 'rgba(99, 102, 241, 0.85)',
-                    borderColor: '#6366f1',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    borderSkipped: false,
-                    barThickness: 30
-
-                }]
-
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: gridColor, drawTicks: false },
-                        ticks: { color: textColor, font: { family: 'Plus Jakarta Sans' }, stepSize: 1 }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: '600' } }
-                    }
-                }
-            }
-
-        }
-
-    );
-
-    // Highest
-
-    let highest='';
-
-    analytics.highest.forEach(item=>{
-
-        highest+=`
-
-        <tr>
-
-            <td style="padding-left: 24px;" class="fw-semibold">${item.country.name}</td>
-
-            <td>
-                <span class="badge bg-danger" style="min-width: 60px; text-align: center; font-size: 13px !important;">
-                    ${item.total_score}
-                </span>
-            </td>
-
-        </tr>
-
-        `;
-
+function chart(id, type, labels, datasets, extra = {}) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), {
+        type, data:{labels,datasets},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:colors.text}}},
+            scales:type === 'pie' ? {} : {x:{ticks:{color:colors.text},grid:{display:false}},y:{beginAtZero:true,ticks:{color:colors.text},grid:{color:colors.grid}}}, ...extra}
     });
-
-    document.getElementById('highestTable').innerHTML=highest;
-
-    // Lowest
-
-    let lowest='';
-
-    analytics.lowest.forEach(item=>{
-
-        lowest+=`
-
-        <tr>
-
-            <td style="padding-left: 24px;" class="fw-semibold">${item.country.name}</td>
-
-            <td>
-                <span class="badge bg-success" style="min-width: 60px; text-align: center; font-size: 13px !important;">
-                    ${item.total_score}
-                </span>
-            </td>
-
-        </tr>
-
-        `;
-
-    });
-
-    document.getElementById('lowestTable').innerHTML=lowest;
-
-});
-
 }
 
-loadAnalytics();
+function lineDataset(label, data, color) {
+    return {label,data,borderColor:color,backgroundColor:color+'22',fill:true,tension:.3};
+}
 
-setInterval(loadAnalytics,30000);
+async function loadCountries() {
+    const countries = await fetch('/api/countries').then(r=>r.json());
+    const select = document.getElementById('analyticsCountry');
+    select.innerHTML = countries.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    await loadAnalytics();
+}
 
-// Watch for theme toggles to update chart configurations
-document.getElementById('darkModeBtn').addEventListener('click', () => {
-    setTimeout(() => {
-        const isDarkNow = document.body.classList.contains('bg-dark');
-        const newTextColor = isDarkNow ? '#94a3b8' : '#64748b';
-        const newGridColor = isDarkNow ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
-        
-        if(regionChart) {
-            regionChart.options.scales.x.ticks.color = newTextColor;
-            regionChart.options.scales.y.ticks.color = newTextColor;
-            regionChart.options.scales.y.grid.color = newGridColor;
-            regionChart.update();
-        }
-        if(pieChart) {
-            pieChart.options.plugins.legend.labels.color = newTextColor;
-            pieChart.data.datasets[0].borderColor = isDarkNow ? '#111625' : '#ffffff';
-            pieChart.update();
-        }
-    }, 100);
-});
+async function loadAnalytics() {
+    const countryId = document.getElementById('analyticsCountry').value;
+    const [dashboard, data] = await Promise.all([
+        fetch('/api/dashboard').then(r=>r.json()),
+        fetch('/api/analytics'+(countryId ? '?country_id='+countryId : '')).then(r=>r.json())
+    ]);
+    if (!countryId && data.selected_country) document.getElementById('analyticsCountry').value = data.selected_country.id;
+    document.getElementById('dataScope').textContent = 'Tren terpilih: '+(data.selected_country?.name || 'belum tersedia');
 
+    chart('riskPie','pie',['High','Medium','Low'],[{data:[dashboard.high_risk,dashboard.medium_risk,dashboard.low_risk],backgroundColor:['#ef4444','#f59e0b','#10b981']}]);
+    chart('factorChart','bar',['Weather','Inflation','News','Currency'],[{label:'Average score',data:Object.values(data.risk_factors),backgroundColor:['#06b6d4','#f59e0b','#ef4444','#8b5cf6'],borderRadius:8}]);
+
+    const economic = data.economic_trend || [];
+    chart('gdpChart','line',economic.map(x=>x.year),[lineDataset('GDP',economic.map(x=>x.gdp),'#06b6d4')]);
+    chart('inflationChart','line',economic.map(x=>x.year),[lineDataset('Inflation',economic.map(x=>x.inflation),'#f59e0b')]);
+    const currency = data.currency_trend || [];
+    chart('currencyChart','line',currency.map(x=>new Date(x.created_at).toLocaleDateString()),[lineDataset('Exchange rate',currency.map(x=>x.exchange_rate),'#8b5cf6')]);
+    const risk = data.risk_trend || [];
+    chart('riskTrendChart','line',risk.map(x=>new Date(x.created_at).toLocaleDateString()),[lineDataset('Risk score',risk.map(x=>x.total_score),'#ef4444')]);
+
+    const rows = items => items.length ? items.map(x=>`<tr><td class="ps-4 fw-semibold">${x.country?.name || '-'}</td><td class="text-end pe-4"><span class="badge ${x.risk_level==='High'?'bg-danger':'bg-success'}">${x.total_score}</span></td></tr>`).join('') : '<tr><td class="text-center text-muted py-4">Belum ada data</td></tr>';
+    document.getElementById('highestTable').innerHTML = rows(data.highest || []);
+    document.getElementById('lowestTable').innerHTML = rows(data.lowest || []);
+}
+
+document.getElementById('analyticsCountry').addEventListener('change', loadAnalytics);
+loadCountries().catch(() => document.getElementById('dataScope').textContent = 'Data analytics belum dapat dimuat.');
 </script>
-
 @endsection

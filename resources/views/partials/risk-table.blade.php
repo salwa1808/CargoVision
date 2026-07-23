@@ -126,7 +126,7 @@ let riskData = [];
 
 function loadRiskTable(){
 
-    fetch("{{ url('/api/risk-scores') }}")
+    fetch("{{ url('/api/risk') }}")
 
     .then(response => response.json())
 

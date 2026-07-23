@@ -17,4 +17,14 @@ class Port extends Model
     {
         return $this->belongsTo(Country::class);
     }
+
+    public function originatingShipments()
+    {
+        return $this->hasMany(Shipment::class, 'origin_port_id');
+    }
+
+    public function destinationShipments()
+    {
+        return $this->hasMany(Shipment::class, 'destination_port_id');
+    }
 }

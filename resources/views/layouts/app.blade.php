@@ -26,17 +26,17 @@
             }
 
             // Accent Color overrides
-            const accent = localStorage.getItem('accent_color') || 'purple';
+            const accent = localStorage.getItem('accent_color') || 'blue';
             let gradient = 'linear-gradient(135deg, #8b5cf6, #a78bfa)';
             let mainColor = '#8b5cf6';
             let glowColor = 'rgba(139, 92, 246, 0.45)';
             let rgb = '139, 92, 246';
 
             if (accent === 'blue') {
-                gradient = 'linear-gradient(135deg, #3b82f6, #60a5fa)';
-                mainColor = '#3b82f6';
-                glowColor = 'rgba(59, 130, 246, 0.45)';
-                rgb = '59, 130, 246';
+                gradient = 'linear-gradient(135deg, #06b6d4, #3b82f6)';
+                mainColor = '#06b6d4';
+                glowColor = 'rgba(6, 182, 212, 0.45)';
+                rgb = '6, 182, 212';
             } else if (accent === 'green') {
                 gradient = 'linear-gradient(135deg, #10b981, #34d399)';
                 mainColor = '#10b981';
@@ -88,7 +88,7 @@
         })();
     </script>
 
-    <title>Global Supply Chain Risk Platform</title>
+    <title>@yield('title', 'CargoVision — Maritime Intelligence')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -106,12 +106,13 @@
 
     <style>
         :root {
-            --bg-body: radial-gradient(circle at 10% 20%, #1c0f38 0%, #0d061c 50%, #05020c 100%);
+            --bg-body: radial-gradient(circle at 12% 12%, #0b3550 0%, #071a2b 42%, #030b16 100%);
             --bg-card: rgba(255, 255, 255, 0.02);
             --border-color: rgba(255, 255, 255, 0.06);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-primary: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            --accent-primary: linear-gradient(135deg, #06b6d4, #3b82f6);
+            --theme-color-main: #06b6d4;
             --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             --input-bg: rgba(255, 255, 255, 0.02);
         }
@@ -1134,6 +1135,88 @@
         .ts-wrapper .item { color: #ffffff !important; }
         .ts-wrapper .placeholder { color: rgba(255, 255, 255, 0.38) !important; }
         .ts-wrapper.form-select { padding: 0 !important; background: transparent !important; border: none !important; }
+
+        /* Global light theme. Components inherit these overrides across every page. */
+        html.theme-dark { color-scheme: dark; }
+        html.theme-light {
+            color-scheme: light;
+            --bg-body: linear-gradient(135deg, #f8fafc 0%, #eef2ff 55%, #f1f5f9 100%);
+            --bg-card: rgba(255, 255, 255, 0.88);
+            --border-color: rgba(15, 23, 42, 0.12);
+            --text-main: #172033;
+            --text-muted: #64748b;
+            --shadow-card: 0 8px 28px rgba(15, 23, 42, 0.09);
+            --input-bg: rgba(255, 255, 255, 0.95);
+        }
+        html.theme-light body { background: var(--bg-body) !important; color: var(--text-main) !important; }
+        html.theme-light #sidebar-wrapper,
+        html.theme-light .top-navbar,
+        html.theme-light footer { background: rgba(255,255,255,.82) !important; border-color: var(--border-color) !important; }
+        html.theme-light .sidebar-brand,
+        html.theme-light .nav-section-title { border-color: var(--border-color) !important; }
+        html.theme-light .brand-title,
+        html.theme-light .nav-item,
+        html.theme-light h1, html.theme-light h2, html.theme-light h3,
+        html.theme-light h4, html.theme-light h5, html.theme-light h6,
+        html.theme-light .text-white:not(.btn):not(.badge) { color: #172033 !important; }
+        html.theme-light .text-muted { color: #64748b !important; }
+        html.theme-light .card,
+        html.theme-light .stat-card-glass,
+        html.theme-light .table-container,
+        html.theme-light .shipment-card,
+        html.theme-light .track-card,
+        html.theme-light .booking-card,
+        html.theme-light .modal-content,
+        html.theme-light .profile-dropdown,
+        html.theme-light .notif-dropdown {
+            background: rgba(255,255,255,.9) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-main) !important;
+            box-shadow: var(--shadow-card) !important;
+        }
+        html.theme-light .form-control,
+        html.theme-light .form-select,
+        html.theme-light input,
+        html.theme-light select,
+        html.theme-light textarea,
+        html.theme-light .ts-control {
+            background-color: var(--input-bg) !important;
+            color: #172033 !important;
+            border-color: rgba(15,23,42,.16) !important;
+        }
+        html.theme-light .form-control::placeholder,
+        html.theme-light input::placeholder,
+        html.theme-light textarea::placeholder { color: #94a3b8 !important; }
+        html.theme-light .table,
+        html.theme-light .table-dark,
+        html.theme-light .admin-table,
+        html.theme-light .shipment-table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #172033;
+            --bs-table-border-color: rgba(15,23,42,.1);
+            --bs-table-hover-bg: rgba(99,102,241,.07);
+            --bs-table-hover-color: #172033;
+            color: #172033 !important;
+        }
+        html.theme-light .table td,
+        html.theme-light .admin-table td,
+        html.theme-light .shipment-table td { background-color: transparent !important; color: #172033; border-color: rgba(15,23,42,.1) !important; }
+        html.theme-light .table th,
+        html.theme-light .admin-table th,
+        html.theme-light .shipment-table th { color: #64748b !important; border-color: rgba(15,23,42,.12) !important; }
+        html.theme-light .nav-item:hover { background: rgba(99,102,241,.08) !important; color: #4f46e5 !important; }
+        html.theme-light .ts-dropdown { background: #fff !important; border-color: rgba(15,23,42,.16) !important; box-shadow: var(--shadow-card) !important; }
+        html.theme-light .ts-dropdown .option { color: #172033 !important; }
+        html.theme-light .ts-dropdown .option:hover,
+        html.theme-light .ts-dropdown .option.active { background: #eef2ff !important; color: #4338ca !important; }
+        html.theme-light .btn-primary,
+        html.theme-light .btn-danger,
+        html.theme-light .btn-success,
+        html.theme-light .badge { color: #fff !important; }
+        html.theme-light .btn-outline-light { color: #334155 !important; border-color: #94a3b8 !important; }
+        html.theme-light .btn-outline-light:hover { color: #fff !important; background: #475569 !important; }
+        html.theme-light .leaflet-popup-content-wrapper,
+        html.theme-light .leaflet-popup-tip { background: #fff !important; color: #172033 !important; }
     </style>
 
     <!-- Tom Select: Custom dark dropdown (globally available) -->
@@ -1141,13 +1224,117 @@
 
     @stack('styles')
 
+    <style>
+        /* CargoVision visual system */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 82% 8%, rgba(6,182,212,.12), transparent 28%),
+                radial-gradient(circle at 18% 85%, rgba(59,130,246,.10), transparent 30%);
+        }
+        #sidebar-wrapper {
+            min-width: 272px;
+            max-width: 272px;
+            background: linear-gradient(180deg, rgba(4,18,32,.94), rgba(3,11,22,.88)) !important;
+            border-right: 1px solid rgba(103,232,249,.1) !important;
+            box-shadow: 16px 0 50px rgba(0,0,0,.16);
+        }
+        .sidebar-brand { padding: 22px 20px; min-height: 82px; gap: 13px; }
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            color: #67e8f9;
+            border-radius: 14px;
+            background: linear-gradient(145deg, rgba(6,182,212,.22), rgba(59,130,246,.12));
+            border: 1px solid rgba(103,232,249,.22);
+            box-shadow: inset 0 1px rgba(255,255,255,.14), 0 8px 24px rgba(6,182,212,.12);
+        }
+        .brand-title { font-size: 18px; letter-spacing: -.35px; }
+        .brand-title span { color: #67e8f9; }
+        .brand-subtitle { color: #60a5fa; font-size: 8px; letter-spacing: 1.7px; margin-top: 3px; }
+        .sidebar-nav { padding: 16px 12px 24px; }
+        .nav-section-title { color: rgba(148,163,184,.55); margin-top: 20px; font-size: 9px; }
+        .nav-item { position: relative; border-radius: 11px; padding: 11px 13px; color: #94a3b8; }
+        .nav-item:hover { background: rgba(6,182,212,.07); color: #e0f2fe; transform: translateX(2px); }
+        .nav-item.active {
+            color: #ecfeff !important;
+            background: linear-gradient(90deg, rgba(6,182,212,.18), rgba(59,130,246,.08)) !important;
+            border-color: rgba(103,232,249,.18) !important;
+            box-shadow: inset 3px 0 #22d3ee, 0 8px 22px rgba(6,182,212,.07);
+        }
+        .nav-icon { width: 24px; height: 24px; border-radius: 7px; font-size: 15px; }
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            min-height: 72px;
+            padding: 14px 28px;
+            background: rgba(3,11,22,.72) !important;
+            border-bottom-color: rgba(103,232,249,.09) !important;
+            box-shadow: 0 10px 35px rgba(0,0,0,.12);
+        }
+        .search-input { border-radius: 14px; padding: 11px 16px; background: rgba(15,35,53,.62); }
+        .search-input:focus { border-color: rgba(34,211,238,.52); box-shadow: 0 0 0 4px rgba(6,182,212,.1); }
+        .user-avatar { background: linear-gradient(135deg,#06b6d4,#2563eb); box-shadow: 0 5px 18px rgba(6,182,212,.25); }
+        .main-content { padding: 32px; }
+        .card,
+        .stat-card-glass,
+        .table-container,
+        .shipment-card,
+        .track-card,
+        .booking-card {
+            border-radius: 18px !important;
+            border: 1px solid rgba(148,163,184,.1) !important;
+            background: linear-gradient(145deg, rgba(15,35,53,.72), rgba(7,23,39,.62)) !important;
+            box-shadow: 0 16px 45px rgba(0,0,0,.18), inset 0 1px rgba(255,255,255,.025) !important;
+        }
+        .card:hover,
+        .stat-card-glass:hover,
+        .shipment-card:hover { border-color: rgba(34,211,238,.25) !important; box-shadow: 0 20px 52px rgba(2,132,199,.12) !important; }
+        .btn-primary {
+            background: linear-gradient(135deg,#06b6d4,#2563eb) !important;
+            border-color: transparent !important;
+            box-shadow: 0 8px 22px rgba(6,182,212,.2) !important;
+        }
+        .btn-primary:hover { background: linear-gradient(135deg,#22d3ee,#3b82f6) !important; box-shadow: 0 11px 28px rgba(6,182,212,.32) !important; }
+        .badge { border-radius: 999px; padding: .48em .8em; letter-spacing: .2px; }
+        .form-control,.form-select { min-height: 43px; border-radius: 11px !important; }
+        .table > :not(caption) > * > * { padding: 15px 16px !important; }
+        .table tbody tr { transition: background .18s ease, transform .18s ease; }
+        .table tbody tr:hover { background: rgba(6,182,212,.045); }
+        .progress { border-radius: 99px; overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg,#06b6d4,#3b82f6); }
+        footer { padding: 22px; font-size: 12px; letter-spacing: .25px; }
+        #loader { background: radial-gradient(circle at center,#0b3550,#030b16 68%); }
+        .loader-spinner { border-bottom-color: #22d3ee; box-shadow: 0 0 24px rgba(34,211,238,.22); }
+        .loader-text { color: #67e8f9; }
+        html.theme-light #sidebar-wrapper { background: linear-gradient(180deg,rgba(255,255,255,.97),rgba(241,245,249,.94)) !important; box-shadow: 14px 0 40px rgba(15,23,42,.06); }
+        html.theme-light .top-navbar { background: rgba(255,255,255,.82) !important; }
+        html.theme-light .card,
+        html.theme-light .stat-card-glass,
+        html.theme-light .table-container,
+        html.theme-light .shipment-card,
+        html.theme-light .track-card,
+        html.theme-light .booking-card { background: rgba(255,255,255,.86) !important; box-shadow: 0 14px 38px rgba(15,23,42,.07) !important; }
+        html.theme-light .nav-item { color: #64748b; }
+        html.theme-light .nav-item.active { color: #075985 !important; background: linear-gradient(90deg,rgba(6,182,212,.13),rgba(59,130,246,.05)) !important; }
+        html.theme-light .search-input { background: rgba(248,250,252,.95) !important; }
+        @media(max-width:768px){.main-content{padding:22px 16px}.top-navbar{padding:12px 16px}.sidebar-brand{min-height:72px}}
+    </style>
+
 </head>
 
 <body>
 
 <div id="loader">
     <div class="loader-spinner"></div>
-    <div class="loader-text">CONNECTING SUPPLY CHAIN CHANNELS...</div>
+        <div class="loader-text">INITIALIZING CARGOVISION...</div>
 </div>
 
 <div id="wrapper">
@@ -1155,61 +1342,62 @@
     <!-- Sidebar Wrapper -->
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <svg class="brand-logo" width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 0L2 4V13C2 19.3 6.3 25.1 12 28C17.7 25.1 22 19.3 22 13V4L12 0Z" fill="#ff7a00"/>
-                <path d="M12 2.5L3.8 5.8V13.2C3.8 18.5 7.4 23.3 12 25.8V2.5Z" fill="#ff9900"/>
-            </svg>
+            <span class="brand-logo" aria-hidden="true">
+                <svg width="31" height="31" viewBox="0 0 32 32" fill="none"><path d="M5 18h22l-3.2 6.2A5 5 0 0 1 19.4 27h-7.8a5 5 0 0 1-4.4-2.8L5 18Z" fill="currentColor"/><path d="M9 10h14v8H9z" stroke="currentColor" stroke-width="2"/><path d="M13 6h6v4h-6zM3 14h26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 29c3-2 5-2 8 0s5 2 8 0 5-2 10 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
             <div class="brand-text">
-                <span class="brand-title" style="font-size: 15px;">Global Supply Chain</span>
-                <span class="brand-subtitle">Risk</span>
+                <span class="brand-title">Cargo<span>Vision</span></span>
+                <span class="brand-subtitle">Supply Chain Risk Intelligence</span>
             </div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-title">Main Control</div>
+            <div class="nav-section-title">Risk Intelligence</div>
             
             <a href="{{ url('/') }}" class="nav-item {{ Request::is('/') ? 'active' : '' }}">
                 <span class="nav-icon">🎛️</span> Dashboard
             </a>
             
             <a href="{{ url('/countries') }}" class="nav-item {{ Request::is('countries') ? 'active' : '' }}">
-                <span class="nav-icon">🗺️</span> Countries
+                <span class="nav-icon">🗺️</span> Country Risk
             </a>
             
             <a href="{{ route('weather') }}" class="nav-item {{ Request::is('weather') ? 'active' : '' }}">
-                <span class="nav-icon">⛅</span> Weather
+                <span class="nav-icon">⛅</span> Global Weather
             </a>
             
             <a href="{{ url('/economy') }}" class="nav-item {{ Request::is('economy') ? 'active' : '' }}">
-                <span class="nav-icon">📈</span> Economy
+                <span class="nav-icon">📈</span> Economic Indicators
             </a>
             
             <a href="{{ url('/currency') }}" class="nav-item {{ Request::is('currency') ? 'active' : '' }}">
-                <span class="nav-icon">💵</span> Currency
+                <span class="nav-icon">💵</span> Currency Impact
             </a>
             
             <a href="{{ route('ports') }}" class="nav-item {{ Request::is('ports') ? 'active' : '' }}">
-                <span class="nav-icon">🚢</span> Ports
+                <span class="nav-icon">⚓</span> Port Map
             </a>
             
             <a href="{{ route('news') }}" class="nav-item {{ Request::is('news') ? 'active' : '' }}">
                 <span class="nav-icon">📰</span> News & Events
             </a>
-
             @if(auth()->check() && auth()->user()->role === 'admin')
-                <div class="nav-section-title">ADMIN PANEL (User Administrator Only)</div>
+                <div class="nav-section-title">Administration</div>
                 <a href="{{ route('users.index') }}" class="nav-item {{ Request::is('admin/users*') ? 'active' : '' }}">
                     <span class="nav-icon">👥</span> User Management
                 </a>
-                <a href="{{ route('articles.index') }}" class="nav-item {{ Request::is('admin/articles*') ? 'active' : '' }}">
-                    <span class="nav-icon">📰</span> Article Management
+                <a href="{{ route('admin.ports.index') }}" class="nav-item {{ Request::is('admin/ports*') ? 'active' : '' }}">
+                    <span class="nav-icon">⚓</span> Manage Ports
+                </a>
+                <a href="{{ route('admin.articles.index') }}" class="nav-item {{ Request::is('admin/articles*') ? 'active' : '' }}">
+                    <span class="nav-icon">📝</span> Article Management
                 </a>
             @endif
 
-            <div class="nav-section-title">Analytics</div>
+            <div class="nav-section-title">Analysis & Decision Support</div>
             
             <a href="{{ url('/analytics') }}" class="nav-item {{ Request::is('analytics') ? 'active' : '' }}">
-                <span class="nav-icon">📊</span> Risk Scores
+                <span class="nav-icon">📊</span> Analytics
             </a>
             
             <a href="{{ url('/watchlist') }}" class="nav-item {{ Request::is('watchlist') ? 'active' : '' }}">
@@ -1217,18 +1405,19 @@
             </a>
             
             <a href="{{ url('/compare') }}" class="nav-item {{ Request::is('compare') ? 'active' : '' }}">
-                <span class="nav-icon">🔀</span> Compare
+                <span class="nav-icon">🔀</span> Compare Countries
             </a>
             
             <a href="{{ route('map') }}" class="nav-item {{ Request::is('map') ? 'active' : '' }}">
-                <span class="nav-icon">🌍</span> Global Map
+    <span class="nav-icon">🌍</span> Global Risk Map
+</a>
+
+            <div class="nav-section-title">Shipment Simulation</div>
+            <a href="{{ route('shipments.index') }}" class="nav-item {{ Request::is('shipments*') ? 'active' : '' }}">
+                <span class="nav-icon">📦</span> Shipment Monitoring
             </a>
 
             <div class="nav-section-title">Account</div>
-            
-            <a href="#" class="nav-item" id="darkModeBtn">
-                <span class="nav-icon">🌙</span> Dark Mode
-            </a>
             
             <a href="{{ route('settings') }}" class="nav-item {{ Request::is('settings') ? 'active' : '' }}">
                 <span class="nav-icon">⚙️</span> Settings
@@ -1346,7 +1535,7 @@
 
         <!-- Footer -->
         <footer>
-            SupplyGuard Risk Intelligence Platform © {{ date('Y') }}
+            CargoVision Maritime Intelligence © {{ date('Y') }}
         </footer>
 
     </div>
@@ -1367,35 +1556,38 @@
     // 1. Theme and Preferences initialization logic
     const body = document.body;
     const btn = document.getElementById("darkModeBtn");
-    const theme = localStorage.getItem('theme') || 'dark';
-    
-    if (theme === 'dark') {
-        body.classList.add("bg-dark", "text-white");
-        if (btn) btn.innerHTML = '<span class="nav-icon">☀</span> Light Mode';
-    } else if (theme === 'light') {
-        body.classList.remove("bg-dark", "text-white");
-        if (btn) btn.innerHTML = '<span class="nav-icon">🌙</span> Dark Mode';
-    } else {
-        // Auto
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (isDark) {
-            body.classList.add("bg-dark", "text-white");
-        } else {
-            body.classList.remove("bg-dark", "text-white");
+    const applyTheme = (theme) => {
+        const resolved = theme === 'auto'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : theme;
+        document.documentElement.classList.remove('theme-dark', 'theme-light');
+        document.documentElement.classList.add(`theme-${resolved}`);
+        document.documentElement.dataset.theme = resolved;
+        body.classList.toggle('bg-dark', resolved === 'dark');
+        body.classList.toggle('text-white', resolved === 'dark');
+        if (btn) {
+            btn.innerHTML = resolved === 'dark'
+                ? '<span class="nav-icon">☀️</span> Light Mode'
+                : '<span class="nav-icon">🌙</span> Dark Mode';
+            btn.setAttribute('aria-label', `Aktifkan ${resolved === 'dark' ? 'light' : 'dark'} mode`);
         }
-        if (btn) btn.innerHTML = '<span class="nav-icon">🌗</span> Auto Theme';
-    }
+        if (typeof Chart !== 'undefined') {
+            Chart.defaults.color = resolved === 'dark' ? '#D1D5DB' : '#475569';
+            Chart.defaults.borderColor = resolved === 'dark' ? 'rgba(255,255,255,.08)' : 'rgba(15,23,42,.1)';
+            Object.values(Chart.instances || {}).forEach(chart => chart.update('none'));
+        }
+        window.dispatchEvent(new CustomEvent('themechanged', { detail: { theme: resolved } }));
+    };
+
+    applyTheme(localStorage.getItem('theme') || 'dark');
 
     if (btn) {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
-            const current = localStorage.getItem('theme') || 'dark';
-            let next = 'light';
-            if (current === 'light') {
-                next = 'dark';
-            }
+            const current = document.documentElement.dataset.theme || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', next);
-            window.location.reload();
+            applyTheme(next);
         });
     }
 

@@ -17,7 +17,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
             <span id="refreshAllIcon">🔄</span>
-            Refresh Page Data
+            Muat Ulang Tampilan
         </button>
     </div>
 
@@ -199,7 +199,7 @@ function initMap() {
     markerGroup = L.layerGroup().addTo(map);
 
     // Watch for theme toggles to swap tiles
-    document.getElementById('darkModeBtn').addEventListener('click', () => {
+    document.getElementById('darkModeBtn')?.addEventListener('click', () => {
         setTimeout(() => {
             map.removeLayer(activeTileLayer);
             activeTileLayer = L.tileLayer(getTileUrl(), {
@@ -314,11 +314,13 @@ function renderTable() {
                 </td>
                 <td class="text-end" style="padding-right: 24px;">
                     <div class="d-flex justify-content-end gap-2">
-                        <button onclick="refreshSingleWeather(${item.id})" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1 border-color fw-semibold" id="btn-refresh-${item.id}" title="Refresh Live Data" style="border-radius:8px;">
+                        @if(auth()->user()->role === 'admin')
+                        <button onclick="refreshSingleWeather(${item.id})" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1 border-color fw-semibold" id="btn-refresh-${item.id}" title="Ambil data terbaru dari Open-Meteo" style="border-radius:8px;">
                             <span id="spinner-${item.id}" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             <span id="icon-${item.id}">🔄</span>
-                            Refresh
+                            Perbarui Open-Meteo
                         </button>
+                        @endif
                         <a href="/country/${item.id}" class="btn btn-sm btn-outline-light border-color fw-semibold" style="border-radius:8px;">
                             Profile
                         </a>
@@ -363,7 +365,7 @@ function renderMap() {
                     <div class="d-flex justify-content-between"><span>Aggregated Risk:</span><strong>${item.total_score} (${item.risk_level})</strong></div>
                 </div>
                 <div class="d-flex gap-1 mt-2">
-                    <button class="btn btn-xs btn-primary w-100 fw-bold" onclick="refreshSingleWeather(${item.id})" style="font-size: 10px; padding: 4px 6px; border-radius: 6px;">🔄 Update Live</button>
+                    @if(auth()->user()->role === 'admin')<button class="btn btn-xs btn-primary w-100 fw-bold" onclick="refreshSingleWeather(${item.id})" style="font-size: 10px; padding: 4px 6px; border-radius: 6px;">🔄 Perbarui Open-Meteo</button>@endif
                     <a href="/country/${item.id}" class="btn btn-xs btn-outline-dark w-100 fw-bold text-center" style="font-size: 10px; padding: 4px 6px; border-radius: 6px; text-decoration: none;">View Detail</a>
                 </div>
             </div>
@@ -387,7 +389,7 @@ function refreshSingleWeather(countryId) {
     // Get CSRF Token
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
-    fetch(`/api/weather/refresh/${countryId}`, {
+    fetch(`/admin/weather/refresh/${countryId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

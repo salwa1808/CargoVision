@@ -25,6 +25,38 @@
 
     </div>
 
+    @if($articles->isNotEmpty())
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-3">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">Analisis Internal CargoVision</h2>
+                    <small class="text-muted">Analisis yang ditulis dan diterbitkan oleh administrator.</small>
+                </div>
+            </div>
+            <div class="row g-3">
+                @foreach($articles as $article)
+                    <div class="col-lg-4 col-md-6">
+                        <article class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="badge bg-info text-dark">{{ $article->category }}</span>
+                                    @if($article->featured)<span class="badge bg-warning text-dark">Featured</span>@endif
+                                </div>
+                                <h3 class="h6 fw-bold">{{ $article->title }}</h3>
+                                <p class="text-muted small mb-3">{{ $article->summary ?: \Illuminate\Support\Str::limit(strip_tags($article->content), 170) }}</p>
+                                <details>
+                                    <summary class="text-primary fw-semibold" style="cursor:pointer">Baca analisis</summary>
+                                    <div class="small text-muted mt-3" style="white-space:pre-line">{{ $article->content }}</div>
+                                </details>
+                            </div>
+                            <div class="card-footer bg-transparent text-muted small">Oleh {{ $article->author?->name }} · {{ $article->created_at->format('d M Y') }}</div>
+                        </article>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     <!-- Filter Card -->
     <div class="card shadow-sm mb-5">
 

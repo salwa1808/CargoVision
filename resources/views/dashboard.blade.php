@@ -13,7 +13,7 @@
             </h1>
 
             <small class="text-muted fw-medium">
-                Real-Time Global Logistics & Risk Intelligence Platform
+                Multi-API Global Supply Chain Risk Intelligence Platform
             </small>
 
         </div>
@@ -21,7 +21,7 @@
         <div class="text-end">
 
             <span class="badge bg-success fs-6 d-inline-flex align-items-center" id="liveStatus" style="padding: 8px 14px !important; border-radius: 10px !important;">
-                <span class="pulse-circle"></span>LIVE
+                <span class="pulse-circle"></span>DATA ACTIVE
             </span>
 
             <div class="mt-2">

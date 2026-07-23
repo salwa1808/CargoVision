@@ -265,7 +265,7 @@ activeTileLayer = L.tileLayer(getTileUrl(), {
 }).addTo(map);
 
 // Watch for theme toggles to swap tiles
-document.getElementById('darkModeBtn').addEventListener('click', () => {
+document.getElementById('darkModeBtn')?.addEventListener('click', () => {
     setTimeout(() => {
         map.removeLayer(activeTileLayer);
         activeTileLayer = L.tileLayer(getTileUrl(), {

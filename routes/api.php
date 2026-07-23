@@ -8,18 +8,17 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\TrendController;
 use App\Models\Port;
 use App\Http\Controllers\Api\AnalyticsApiController;
+use App\Http\Controllers\Api\IntelligenceApiController;
 use App\Models\RiskScore;
 use App\Http\Controllers\WeatherController;
 
-Route::get('/countries', [CountryController::class, 'index']);
+Route::get('/countries', [IntelligenceApiController::class, 'countries']);
 
 Route::get('/countries/{id}', [CountryController::class, 'show']);
 
-Route::get('/risk-scores', [RiskScoreController::class, 'index']);
+Route::get('/risk', [IntelligenceApiController::class, 'risk']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
-
-Route::get('/analytics', [AnalyticsController::class, 'index']);
 
 Route::get('/trend/{country}', [TrendController::class, 'index']);
 
@@ -38,6 +37,8 @@ Route::get('/vessels', function () {
 });
 
 Route::get('/analytics', [AnalyticsApiController::class,'index']);
+Route::get('/news', [IntelligenceApiController::class, 'news']);
+Route::get('/currency', [IntelligenceApiController::class, 'currency']);
 
 Route::get('/high-risk', function () {
 
@@ -50,4 +51,3 @@ Route::get('/high-risk', function () {
 });
 
 Route::get('/weather', [WeatherController::class, 'getWeatherApi']);
-Route::post('/weather/refresh/{id}', [WeatherController::class, 'refreshWeather']);

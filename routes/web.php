@@ -14,6 +14,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\GlobalMapController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\AdminPortController;
+use App\Http\Controllers\AdminDataController;
+use App\Http\Controllers\ArticleController;
 
 // Guest Auth Routes
 Route::middleware('guest')->group(function () {
@@ -38,11 +42,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/export/pdf', [ExportController::class, 'pdf']);
 
-    Route::get('/analytics', function () {
-        return view('analytics');
-    });
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
 
     Route::get('/ports', [PortController::class, 'index'])->name('ports');
+    Route::resource('shipments', ShipmentController::class)->only(['index', 'show']);
 
     Route::get('/news', [NewsController::class, 'index'])->name('news');
 
@@ -60,6 +63,10 @@ Route::middleware('auth')->group(function () {
     // Admin Panel Routes
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::resource('users', \App\Http\Controllers\UserController::class);
-        Route::resource('articles', \App\Http\Controllers\ArticleController::class);
+        Route::resource('ports', AdminPortController::class)->only(['index','store','update','destroy'])->names('admin.ports');
+        Route::resource('articles', ArticleController::class)->except(['show'])->names('admin.articles');
+        Route::post('data/sync', [AdminDataController::class, 'sync'])->name('admin.data.sync');
+        Route::post('risk/recalculate', [AdminDataController::class, 'recalculateRisk'])->name('admin.risk.recalculate');
+        Route::post('weather/refresh/{id}', [WeatherController::class, 'refreshWeather'])->name('admin.weather.refresh');
     });
 });

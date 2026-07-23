@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\WeatherSnapshot;
-use App\Models\EconomicIndicator;
-use App\Models\ExchangeRate;
-use App\Models\RiskScore;
+use App\Services\RiskScoringService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Throwable;
@@ -60,7 +58,7 @@ class WeatherController extends Controller
     /**
      * Fetch real-time weather from Open-Meteo, save it, and recalculate risk score.
      */
-    public function refreshWeather($id)
+    public function refreshWeather($id, RiskScoringService $scoring)
     {
         $country = Country::findOrFail($id);
 
@@ -110,7 +108,7 @@ class WeatherController extends Controller
             ]);
 
             // Recalculate Risk Score
-            $risk = $this->recalculateRiskForCountry($country);
+            $risk = $scoring->calculate($country);
 
             return response()->json([
                 'success' => true,
@@ -139,68 +137,4 @@ class WeatherController extends Controller
         }
     }
 
-    /**
-     * Recalculates risk score for a country based on the latest indicators.
-     */
-    private function recalculateRiskForCountry(Country $country)
-    {
-        $weather = WeatherSnapshot::where('country_id', $country->id)
-            ->latest()
-            ->first();
-
-        $economic = EconomicIndicator::where('country_id', $country->id)
-            ->latest()
-            ->first();
-
-        $currency = ExchangeRate::where('country_id', $country->id)
-            ->latest()
-            ->first();
-
-        // Weather Score (30% weight)
-        $weatherScore = match ($weather->storm_risk ?? 'low') {
-            'high' => 90,
-            'medium' => 50,
-            default => 10,
-        };
-
-        // Inflation Score (20% weight)
-        $inflation = $economic->inflation ?? 0;
-        $inflationScore = min($inflation * 5, 100);
-
-        // News Score (40% weight - static 0 for now)
-        $newsScore = 0;
-
-        // Currency Score (10% weight - static 20 if exists, else 0)
-        $currencyScore = $currency ? 20 : 0;
-
-        // Total Score
-        $total =
-            ($weatherScore * 0.30) +
-            ($inflationScore * 0.20) +
-            ($newsScore * 0.40) +
-            ($currencyScore * 0.10);
-
-        // Risk Level
-        if ($total < 33) {
-            $level = 'Low';
-        } elseif ($total < 66) {
-            $level = 'Medium';
-        } else {
-            $level = 'High';
-        }
-
-        return RiskScore::updateOrCreate(
-            [
-                'country_id' => $country->id,
-            ],
-            [
-                'weather_score' => $weatherScore,
-                'inflation_score' => $inflationScore,
-                'news_score' => $newsScore,
-                'currency_score' => $currencyScore,
-                'total_score' => round($total, 2),
-                'risk_level' => $level,
-            ]
-        );
-    }
 }

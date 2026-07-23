@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\NewsCache;
 use App\Models\Country;
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
@@ -27,7 +28,12 @@ class NewsController extends Controller
         $news = $query->latest()->paginate(20);
 
         $countries = Country::orderBy('name')->get();
+        $articles = Article::with('author')
+            ->where('status', 'Published')
+            ->latest()
+            ->take(6)
+            ->get();
 
-        return view('news', compact('news', 'countries'));
+        return view('news', compact('news', 'countries', 'articles'));
     }
 }

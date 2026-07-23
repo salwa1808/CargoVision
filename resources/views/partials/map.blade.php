@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }).addTo(map);
 
     // Watch for theme toggles to swap tiles
-    document.getElementById('darkModeBtn').addEventListener('click', () => {
+    document.getElementById('darkModeBtn')?.addEventListener('click', () => {
         setTimeout(() => {
             map.removeLayer(activeTileLayer);
             activeTileLayer = L.tileLayer(getTileUrl(), {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             fetch("{{ url('/api/countries') }}").then(r=>r.json()),
 
-            fetch("{{ url('/api/risk-scores') }}").then(r=>r.json())
+            fetch("{{ url('/api/risk') }}").then(r=>r.json())
 
         ])
 
