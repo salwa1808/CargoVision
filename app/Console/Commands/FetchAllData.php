@@ -26,9 +26,11 @@ class FetchAllData extends Command
 
             'fetch:weather',
 
-            'fetch:exchange',
+            'fetch:exchangerates',
 
             'fetch:news',
+
+            'fetch:ports',
 
             'calculate:risk',
 

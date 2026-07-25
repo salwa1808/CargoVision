@@ -48,6 +48,7 @@ FILESYSTEM_DISK=local
 ADMIN_NAME=System Administrator
 ADMIN_EMAIL=EMAIL-ADMIN
 ADMIN_PASSWORD=PASSWORD-ADMIN-YANG-KUAT
+BOOTSTRAP_DATA=true
 ```
 
 Buat `APP_KEY` di komputer lokal:
@@ -65,6 +66,10 @@ Jangan memasukkan password atau `APP_KEY` ke GitHub.
 3. Setelah deployment berstatus **Success**, buka
    **Settings > Networking > Generate Domain**.
 4. Salin domain tersebut ke variabel `APP_URL`, lalu redeploy.
+
+Setelah deployment pertama berhasil dan data terisi, ubah `BOOTSTRAP_DATA`
+menjadi `false` agar sinkronisasi seluruh API tidak dijalankan pada setiap
+deployment.
 
 ## 5. Isi data awal sekali saja
 
