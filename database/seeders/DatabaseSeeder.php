@@ -17,19 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'System Administrator',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-            'password' => bcrypt('password'),
-        ]);
-
-        User::factory()->create([
-            'name' => 'Standard User',
-            'email' => 'user@example.com',
-            'role' => 'user',
-            'password' => bcrypt('password'),
-        ]);
+        if (env('ADMIN_EMAIL') && env('ADMIN_PASSWORD')) {
+            User::updateOrCreate(
+                ['email' => env('ADMIN_EMAIL')],
+                [
+                    'name' => env('ADMIN_NAME', 'System Administrator'),
+                    'role' => 'admin',
+                    'status' => 'Active',
+                    'password' => bcrypt(env('ADMIN_PASSWORD')),
+                ]
+            );
+        }
 
         $this->call(VesselSeeder::class);
         $this->call(ShipmentSeeder::class);
