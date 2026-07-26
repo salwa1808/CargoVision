@@ -20,7 +20,7 @@
 let chart;
 
 function loadChart() {
-    fetch("{{ url('/api/dashboard') }}")
+    fetch("/api/dashboard")
     .then(response => response.json())
     .then(data => {
         document.getElementById('totalCountries').innerText = data.total_countries;

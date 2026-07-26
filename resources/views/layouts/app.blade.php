@@ -1730,7 +1730,7 @@
 
         if (!enableToast && !enableDesktop) return;
 
-        fetch("{{ url('/api/high-risk') }}")
+        fetch("/api/high-risk")
             .then(r => r.json())
             .then(data => {
                 if (lastHighRisk === null) {
@@ -2000,7 +2000,7 @@
         const triggerNews = localStorage.getItem('alert_news') !== 'off';
         const enableDesktop = localStorage.getItem('enable_desktop') === 'on';
 
-        fetch("{{ url('/api/high-risk') }}")
+        fetch("/api/high-risk")
             .then(r => r.json())
             .then(data => {
                 if (lastHighRisk === null) {

@@ -280,7 +280,7 @@ const portsLayer = L.layerGroup().addTo(map);
 const vesselsLayer = L.layerGroup().addTo(map);
 
 // Load Ports
-fetch("{{ url('/api/ports') }}")
+fetch("/api/ports")
 .then(r=>r.json())
 .then(data=>{
     data.forEach(port=>{
@@ -369,7 +369,7 @@ function adjustIfOnLand(lat, lng) {
 }
 
 // Load Vessels
-fetch("{{ url('/api/vessels') }}")
+fetch("/api/vessels")
 .then(r=>r.json())
 .then(data=>{
     const vesselMarkers = [];

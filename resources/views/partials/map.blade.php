@@ -86,9 +86,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         Promise.all([
 
-            fetch("{{ url('/api/countries') }}").then(r=>r.json()),
+            fetch("/api/countries").then(r=>r.json()),
 
-            fetch("{{ url('/api/risk') }}").then(r=>r.json())
+            fetch("/api/risk").then(r=>r.json())
 
         ])
 

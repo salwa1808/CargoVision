@@ -284,7 +284,7 @@ function animateCounter(id,value){
 
 function loadDashboard(){
 
-    fetch("{{ url('/api/dashboard') }}")
+    fetch("/api/dashboard")
 
     .then(res=>res.json())
 
