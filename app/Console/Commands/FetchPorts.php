@@ -27,6 +27,11 @@ class FetchPorts extends Command
 
         $this->info('Country loaded : ' . count($countries));
 
+        $existing = Port::query()
+            ->get(['country_id', 'name'])
+            ->mapWithKeys(fn (Port $port) => [$port->country_id.'|'.$port->name => true])
+            ->all();
+
         $handle = fopen($file, 'r');
 
         // Lewati baris pertama
@@ -34,6 +39,8 @@ class FetchPorts extends Command
 
         $success = 0;
         $skip = 0;
+        $batch = [];
+        $now = now();
 
         while (($row = fgetcsv($handle, 0, ',')) !== false) {
 
@@ -77,27 +84,34 @@ $name = mb_convert_encoding(
                 continue;
             }
 
-            // Hindari data duplikat
-            $exists = Port::where('country_id', $countries[$countryCode])
-                ->where('name', $name)
-                ->exists();
+            $countryId = $countries[$countryCode];
+            $key = $countryId.'|'.$name;
 
-            if ($exists) {
+            if (isset($existing[$key])) {
                 continue;
             }
 
-            Port::create([
-                'country_id' => $countries[$countryCode],
+            $batch[] = [
+                'country_id' => $countryId,
                 'name'       => $name,
                 'latitude'   => $lat,
                 'longitude'  => $lng,
-            ]);
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ];
+            $existing[$key] = true;
 
             $success++;
 
-            if ($success % 500 == 0) {
+            if (count($batch) >= 500) {
+                Port::insert($batch);
+                $batch = [];
                 $this->info("Imported : {$success}");
             }
+        }
+
+        if ($batch !== []) {
+            Port::insert($batch);
         }
 
         fclose($handle);
