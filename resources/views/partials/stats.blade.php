@@ -300,11 +300,11 @@ function loadDashboard(){
 
         let total=data.total_countries;
 
-        let high=((data.high_risk/total)*100).toFixed(1);
+        let high=total > 0 ? ((data.high_risk/total)*100).toFixed(1) : "0.0";
 
-        let medium=((data.medium_risk/total)*100).toFixed(1);
+        let medium=total > 0 ? ((data.medium_risk/total)*100).toFixed(1) : "0.0";
 
-        let low=((data.low_risk/total)*100).toFixed(1);
+        let low=total > 0 ? ((data.low_risk/total)*100).toFixed(1) : "0.0";
 
         document.getElementById("highBar").style.width=high+"%";
         document.getElementById("mediumBar").style.width=medium+"%";

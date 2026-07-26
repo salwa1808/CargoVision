@@ -1455,9 +1455,12 @@
                 
                 @if(auth()->check() && auth()->user()->role === 'admin')
                     <!-- Sync APIs Button (Glass effect) -->
-                    <button class="btn-glass" onclick="location.reload();">
-                        🔄 Sync APIs
-                    </button>
+                    <form method="POST" action="{{ route('admin.data.sync') }}" class="m-0">
+                        @csrf
+                        <button class="btn-glass" type="submit" onclick="this.disabled=true;this.innerHTML='⏳ Syncing...';this.form.submit();">
+                            🔄 Sync APIs
+                        </button>
+                    </form>
                 @endif
 
                 <!-- Notification Bell with Dropdown -->
