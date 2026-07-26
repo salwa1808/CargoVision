@@ -8,6 +8,11 @@ class CountriesService
 {
     public function getCountries()
     {
-        return Http::get('https://countries.dev/countries')->json();
+        return Http::timeout(60)
+            ->retry(3, 1000)
+            ->acceptJson()
+            ->get('https://raw.githubusercontent.com/mledoze/countries/master/countries.json')
+            ->throw()
+            ->json();
     }
 }

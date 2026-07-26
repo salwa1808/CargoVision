@@ -10,43 +10,44 @@ use Throwable;
 class FetchCountries extends Command
 {
     protected $signature = 'fetch:countries';
-    protected $description = 'Fetch semua negara dari REST Countries API';
+    protected $description = 'Fetch semua negara dari dataset publik';
 
     public function handle(): int
     {
-        $this->info('Mengambil data negara dari REST Countries...');
+        $this->info('Mengambil data negara dari dataset publik...');
 
         try {
             $response = Http::timeout(60)
                 ->retry(3, 1000)
                 ->acceptJson()
-                ->get('https://restcountries.com/v3.1/all', [
-                    'fields' => 'name,cca2,cca3,capital,region,subregion,currencies,population,latlng,flags,languages',
-                ]);
+                ->get('https://raw.githubusercontent.com/mledoze/countries/master/countries.json');
         } catch (Throwable $exception) {
-            $this->error('REST Countries tidak dapat dihubungi: '.$exception->getMessage());
+            $this->error('Dataset negara tidak dapat dihubungi: '.$exception->getMessage());
             return self::FAILURE;
         }
 
-        if (! $response->successful() || ! is_array($response->json())) {
-            $this->error('REST Countries mengembalikan respons yang tidak valid.');
+        $countries = $response->json();
+
+        if (! $response->successful() || ! is_array($countries) || ! array_is_list($countries)) {
+            $this->error('Dataset negara mengembalikan respons yang tidak valid.');
             return self::FAILURE;
         }
 
         $saved = 0;
-        foreach ($response->json() as $item) {
+        foreach ($countries as $item) {
             $cca3 = $item['cca3'] ?? null;
             if (! $cca3) {
                 continue;
             }
 
+            $cca2 = $item['cca2'] ?? null;
             $currencyCode = array_key_first($item['currencies'] ?? []);
             $currency = $currencyCode ? ($item['currencies'][$currencyCode] ?? []) : [];
 
             Country::updateOrCreate(['cca3' => $cca3], [
                 'name' => $item['name']['common'] ?? $cca3,
                 'official_name' => $item['name']['official'] ?? null,
-                'cca2' => $item['cca2'] ?? null,
+                'cca2' => $cca2,
                 'capital' => $item['capital'][0] ?? null,
                 'region' => $item['region'] ?? null,
                 'subregion' => $item['subregion'] ?? null,
@@ -57,8 +58,10 @@ class FetchCountries extends Command
                 'population' => $item['population'] ?? null,
                 'latitude' => $item['latlng'][0] ?? null,
                 'longitude' => $item['latlng'][1] ?? null,
-                'flag_png' => $item['flags']['png'] ?? null,
-                'flag_svg' => $item['flags']['svg'] ?? null,
+                'flag_png' => $cca2
+                    ? 'https://flags.restcountries.com/v5/w320/'.strtolower($cca2).'.png'
+                    : null,
+                'flag_svg' => null,
             ]);
             $saved++;
         }
