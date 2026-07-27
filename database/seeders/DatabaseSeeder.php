@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        $this->call(ArticleSeeder::class);
         $this->call(VesselSeeder::class);
         $this->call(ShipmentSeeder::class);
     }

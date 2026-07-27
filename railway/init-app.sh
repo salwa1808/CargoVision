@@ -6,6 +6,7 @@ php artisan optimize:clear
 
 if [ -n "${ADMIN_EMAIL:-}" ] && [ -n "${ADMIN_PASSWORD:-}" ]; then
     php artisan db:seed --class=ProductionAdminSeeder --force
+    php artisan db:seed --class=ArticleSeeder --force
 fi
 
 if [ "${BOOTSTRAP_DATA:-false}" = "true" ]; then

@@ -24,6 +24,14 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && strcasecmp((string) $user->status, 'Active') !== 0) {
+            return back()->withErrors([
+                'email' => 'Akun Anda sedang dinonaktifkan. Hubungi administrator.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended('/');
