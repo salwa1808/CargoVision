@@ -9,6 +9,8 @@ if [ -n "${ADMIN_EMAIL:-}" ] && [ -n "${ADMIN_PASSWORD:-}" ]; then
     php artisan db:seed --class=ArticleSeeder --force
 fi
 
+php artisan db:seed --class=ShipmentSeeder --force
+
 if [ "${BOOTSTRAP_DATA:-false}" = "true" ]; then
     php artisan fetch:all
 fi

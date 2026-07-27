@@ -18,6 +18,11 @@ class ShipmentSeeder extends Seeder
         $vessels = Vessel::orderBy('id')->limit(12)->get();
         $now = now();
 
+        if ($countries->isEmpty() || $vessels->isEmpty()) {
+            $this->command?->warn('Data simulasi shipment tidak dibuat karena negara atau vessel belum tersedia.');
+            return;
+        }
+
         foreach ($vessels as $i => $vessel) {
             $origin = $countries[$i % $countries->count()];
             $destination = $countries[($i + 1) % $countries->count()];
@@ -34,6 +39,7 @@ class ShipmentSeeder extends Seeder
             );
         }
         $this->command?->call('shipments:update-progress');
+        $this->command?->info($vessels->count().' shipment simulasi tersedia.');
     }
 
     private function ensureDemoMasters(): void
